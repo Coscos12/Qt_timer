@@ -10,12 +10,12 @@ from PyQt5.QtGui import QImage, QPalette, QBrush, QTextCursor
 class Example(QWidget):
     def __init__(self, parent=None):
         super(Example, self).__init__(parent)
-        self.places = [0, 120, 210, 300, 390, 480, 570]
-        self.new_places = [0, 120, 210, 300, 390, 480, 570]
+        self.places = [0, 180, 270, 360, 450, 540, 630]
+        self.new_places = [0, 180, 270, 360, 450, 540, 630]
         self.path =''
         self.font = QtGui.QFont()
         self.font.setFamily("Arial")
-        self.font.setPointSize(24)
+        self.font.setPointSize(26)
 
         for i in range(1, 7):
             # getattr(self, f"label{i}").setEnabled(True)
@@ -28,6 +28,7 @@ class Example(QWidget):
             getattr(self, f"label{i}").setLineWidth(2)
             getattr(self, f"label{i}").setGeometry(QtCore.QRect(1700, self.places[i], 150, 50))
             getattr(self, f"label{i}").setObjectName(f"label{i}")
+            getattr(self, f"label{i}").setStyleSheet("background-color: rgb(255,255,255, 75%);")
             setattr(self, f"textBrowser{i}", QLabel(self))
             getattr(self, f"textBrowser{i}").setEnabled(True)
             getattr(self, f"textBrowser{i}").setGeometry(QtCore.QRect(50, self.places[i], 1000, 80))
@@ -35,20 +36,17 @@ class Example(QWidget):
             getattr(self, f"textBrowser{i}").setFrameShape(QtWidgets.QFrame.Box)
             getattr(self, f"textBrowser{i}").setLineWidth(2)
             getattr(self, f"textBrowser{i}").setObjectName(f"textBrowser{i}")
+            getattr(self, f"textBrowser{i}").setStyleSheet("background-color: rgb(255,255,255, 75%);")
 
-        self.label1.setStyleSheet("background-color: rgb(135, 206,250);")
-        self.label2.setStyleSheet("background-color: rgb(238, 130, 238);")
-        self.label3.setStyleSheet("background-color: rgb(255, 0, 0);")
-        self.label4.setStyleSheet("background-color: rgb(255, 255, 0);")
-        self.label5.setStyleSheet("background-color: rgb(0, 100, 255);")
-        self.label6.setStyleSheet("background-color: rgb(0, 255, 0);")
+        self.label_header = QLabel(self)
+        self.label_header.setEnabled(True)
+        self.label_header.setFont(self.font)
+        self.label_header.setFrameShape(QtWidgets.QFrame.Box)
+        self.label_header.setLineWidth(2)
+        self.label_header.setGeometry(QtCore.QRect(560, 30, 800, 80))
+        self.label_header.setObjectName(f"label_header")
+        self.label_header.setStyleSheet("background-color: rgb(255,255,255, 75%);")
 
-        self.textBrowser1.setStyleSheet("background-color: rgb(135, 206,250);")
-        self.textBrowser2.setStyleSheet("background-color: rgb(238, 130, 238);")
-        self.textBrowser3.setStyleSheet("background-color: rgb(255, 0, 0);")
-        self.textBrowser4.setStyleSheet("background-color: rgb(255, 255, 0);")
-        self.textBrowser5.setStyleSheet("background-color: rgb(0, 100, 255);")
-        self.textBrowser6.setStyleSheet("background-color: rgb(0, 255, 0);")
 
         self.setWindowTitle('Icon')
         self.text1 = str(self.counter1 / 100)
@@ -79,14 +77,10 @@ class Example(QWidget):
          self.timer.stop()
 
     def Reset(self):
-        self.counter1 = 0
-        self.counter2 = 0
-        self.counter3 = 0
-        self.counter4 = 0
-        self.counter5 = 0
-        self.counter6 = 0
-        self.places = [0, 120, 210, 300, 390, 480, 570]
-        self.new_places = [0, 120, 210, 300, 390, 480, 570]
+        for i in range(1, 7):
+            setattr(self, f"counter{i}", 0)
+        self.places = [0, 180, 270, 360, 450, 540, 630]
+        self.new_places = [0, 180, 270, 360, 450, 540, 630]
         self.refreshing()
         self.settingText()
 
@@ -101,7 +95,7 @@ class Example(QWidget):
         for i in range(1, 7):
             getattr(self, f"label{i}").setGeometry(QtCore.QRect(1700, self.new_places[self.places.index(self.new_places[i])], 150, 50))
             getattr(self, f"textBrowser{i}").setGeometry(QtCore.QRect(50, self.new_places[self.places.index(self.new_places[i])], 1000, 80))
-        print("refreshing done")
+
 
     def showTime(self):
         if self.flag1:
@@ -117,10 +111,10 @@ class Example(QWidget):
         if self.flag6:
             self.counter6 += 1
         self.settingText()
-        # counter +=1
-        # print(self.counter1)
 
     def settingText(self):
+        # for i in range(1, 7):
+        #     setattr(self, f"text{i}", str(self.counter1 / 100))
         self.text1 = str(self.counter1 / 100)
         self.text2 = str(self.counter2 / 100)
         self.text3 = str(self.counter3 / 100)

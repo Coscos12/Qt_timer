@@ -130,10 +130,11 @@ class Ui_Dialog(object):
         self.counter = 0
         self.second_window.Reset()
     def Pause(self, i):
-        setattr(self.second_window, f"flag{i}", False)
-        self.counter += 1
-        k = self.second_window.places.pop(self.second_window.places.index(self.second_window.new_places[i]))
-        self.second_window.places.insert(self.counter, k)
+        if (getattr(self.second_window, f"flag{i}") == True):
+            setattr(self.second_window, f"flag{i}", False)
+            self.counter += 1
+            k = self.second_window.places.pop(self.second_window.places.index(self.second_window.new_places[i]))
+            self.second_window.places.insert(self.counter, k)
 
         self.second_window.refreshing()
 
@@ -144,6 +145,7 @@ class Ui_Dialog(object):
 
 
     def printing(self):
+        self.second_window.label_header.setText(self.lineEdit1.text())
         self.second_window.textBrowser1.setText(self.lineEdit2.text())
         self.second_window.textBrowser2.setText(self.lineEdit3.text())
         self.second_window.textBrowser3.setText(self.lineEdit4.text())
@@ -162,8 +164,4 @@ if __name__ == "__main__":
     ui = Ui_Dialog()
     ui.setupUi(Dialog)
     Dialog.show()
-    # Dialog1 = QtWidgets.QMainWindow()
-    # ui1 = Ui_MainWindow()
-    # ui1.setupUi(Dialog1)
-    # Dialog1.show()
     sys.exit(app.exec_())
