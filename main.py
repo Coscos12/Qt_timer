@@ -18,6 +18,7 @@ from second_window import *
 
 class Ui_Dialog(object):
     def setupUi(self, Dialog):
+        self.col = QColor(0, 0, 0)
         self.counter = 0
         Dialog.setObjectName("Dialog")
         Dialog.resize(776, 482)
@@ -25,15 +26,14 @@ class Ui_Dialog(object):
         for i in range(1, 8):
             setattr(self, f"lineEdit{i}", QtWidgets.QLineEdit(Dialog))
             getattr(self, f"lineEdit{i}").setObjectName(f"lineEdit{i}")
+            getattr(self, f"lineEdit{i}").setGeometry(QtCore.QRect(80, 90+i*40, 400, 30))
+        self.lineEdit7.setGeometry(QtCore.QRect(210, 40, 400, 30))
 
 
-        self.lineEdit1.setGeometry(QtCore.QRect(210, 40, 400, 30))
-        self.lineEdit2.setGeometry(QtCore.QRect(80, 130, 400, 30))
-        self.lineEdit3.setGeometry(QtCore.QRect(80, 170, 400, 30))
-        self.lineEdit4.setGeometry(QtCore.QRect(80, 210, 400, 30))
-        self.lineEdit5.setGeometry(QtCore.QRect(80, 250, 400, 30))
-        self.lineEdit6.setGeometry(QtCore.QRect(80, 290, 400, 30))
-        self.lineEdit7.setGeometry(QtCore.QRect(80, 330, 400, 30))
+
+        # self.lineEdit0 = QtWidgets.QLineEdit(Dialog)
+        # self.lineEdit0.setGeometry(QtCore.QRect(210, 380, 400, 30))
+        # self.LineEdit0.setObjectName("LineEdit0")
 
         for i in range(1, 7):
             # getattr(self, f"label{i}").setEnabled(True)
@@ -41,6 +41,15 @@ class Ui_Dialog(object):
             getattr(self, f"pause_btn{i}").setObjectName(f"pause_btn{i}")
             getattr(self, f"pause_btn{i}").setGeometry(QtCore.QRect(520, 90+i*40, 75, 30))
 
+        self.button_font = QtWidgets.QPushButton(Dialog)
+        self.button_font.setObjectName("pause_font")
+        self.button_font.setGeometry(QtCore.QRect(80, 430, 75, 25))
+        self.button_font.setText("шрифт")
+
+        self.button_color = QtWidgets.QPushButton(Dialog)
+        self.button_color.setObjectName("pause_color")
+        self.button_color.setGeometry(QtCore.QRect(180, 430, 75, 25))
+        self.button_color.setText("цвет")
 
         self.pause_btn1.setText("голубой")
         self.pause_btn2.setText("розовый")
@@ -78,6 +87,7 @@ class Ui_Dialog(object):
         self.stop_button = QtWidgets.QPushButton(self.widget)
         self.reset_button = QtWidgets.QPushButton(self.widget)
         self.start_window = QtWidgets.QPushButton(self.widget)
+        self.horizontalLayout1 = QtWidgets.QHBoxLayout(self.widget)
 
         # self.fontComboBox.setObjectName("fontComboBox")
         self.choose_backgroung.setObjectName("Choose_background")
@@ -92,6 +102,8 @@ class Ui_Dialog(object):
         self.horizontalLayout.addWidget(self.stop_button)
         self.horizontalLayout.addWidget(self.reset_button)
         self.horizontalLayout.addWidget(self.start_window)
+
+
 
         self.retranslateUi(Dialog)
         self.add_functions()
@@ -125,10 +137,27 @@ class Ui_Dialog(object):
         self.pause_btn4.clicked.connect(lambda: self.Pause(4))
         self.pause_btn5.clicked.connect(lambda: self.Pause(5))
         self.pause_btn6.clicked.connect(lambda: self.Pause(6))
+        self.button_font.clicked.connect(self.Font)
+        self.button_color.clicked.connect(self.Color)
+
+    def Font(self):
+        print("begin")
+        self.Font, self.ok = QFontDialog.getFont()
+        print(("init"))
+        if self.ok:
+            self.second_window.font = self.Font
+            print("font done")
+
+    def Color(self):
+        self.col = QColorDialog.getColor()
+        if self.col.isValid():
+            self.second_window.color = self.col
+            print("color done")
 
     def Reset(self):
         self.counter = 0
         self.second_window.Reset()
+
     def Pause(self, i):
         if (getattr(self.second_window, f"flag{i}") == True):
             setattr(self.second_window, f"flag{i}", False)
@@ -145,13 +174,13 @@ class Ui_Dialog(object):
 
 
     def printing(self):
-        self.second_window.label_header.setText(self.lineEdit1.text())
-        self.second_window.textBrowser1.setText(self.lineEdit2.text())
-        self.second_window.textBrowser2.setText(self.lineEdit3.text())
-        self.second_window.textBrowser3.setText(self.lineEdit4.text())
-        self.second_window.textBrowser4.setText(self.lineEdit5.text())
-        self.second_window.textBrowser5.setText(self.lineEdit6.text())
-        self.second_window.textBrowser6.setText(self.lineEdit7.text())
+        self.second_window.label_header.setText(self.lineEdit7.text())
+        self.second_window.textBrowser1.setText(self.lineEdit1.text())
+        self.second_window.textBrowser2.setText(self.lineEdit2.text())
+        self.second_window.textBrowser3.setText(self.lineEdit3.text())
+        self.second_window.textBrowser4.setText(self.lineEdit4.text())
+        self.second_window.textBrowser5.setText(self.lineEdit5.text())
+        self.second_window.textBrowser6.setText(self.lineEdit6.text())
         self.second_window.visiable()
 
 

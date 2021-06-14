@@ -2,7 +2,7 @@ import sys
 from PyQt5 import QtCore, QtGui, QtWidgets, QtSerialPort
 from PyQt5.QtCore import *
 from PyQt5.QtWidgets import *
-from PyQt5.QtGui import QImage, QPalette, QBrush, QTextCursor
+from PyQt5.QtGui import QImage, QPalette, QBrush, QTextCursor, QColor
 
 
 
@@ -14,38 +14,38 @@ class Example(QWidget):
         self.new_places = [0, 180, 270, 360, 450, 540, 630]
         self.path =''
         self.font = QtGui.QFont()
+        self.color = QColor(0, 0, 0)
         self.font.setFamily("Arial")
-        self.font.setPointSize(26)
+        self.font.setPointSize(24)
 
         for i in range(1, 7):
-            # getattr(self, f"label{i}").setEnabled(True)
             setattr(self, f"counter{i}", 0)
             setattr(self, f"flag{i}", False)
             setattr(self, f"label{i}", QLabel(self))
             getattr(self, f"label{i}").setEnabled(True)
             getattr(self, f"label{i}").setFont(self.font)
-            getattr(self, f"label{i}").setFrameShape(QtWidgets.QFrame.Box)
-            getattr(self, f"label{i}").setLineWidth(2)
+            # getattr(self, f"label{i}").setFrameShape(QtWidgets.QFrame.Box)
+            # getattr(self, f"label{i}").setLineWidth(2)
             getattr(self, f"label{i}").setGeometry(QtCore.QRect(1700, self.places[i], 150, 50))
             getattr(self, f"label{i}").setObjectName(f"label{i}")
-            getattr(self, f"label{i}").setStyleSheet("background-color: rgb(255,255,255, 75%);")
+            # getattr(self, f"label{i}").setStyleSheet("background-color: rgb(255,255,255, 75%);")
             setattr(self, f"textBrowser{i}", QLabel(self))
             getattr(self, f"textBrowser{i}").setEnabled(True)
             getattr(self, f"textBrowser{i}").setGeometry(QtCore.QRect(50, self.places[i], 1000, 80))
             getattr(self, f"textBrowser{i}").setFont(self.font)
-            getattr(self, f"textBrowser{i}").setFrameShape(QtWidgets.QFrame.Box)
-            getattr(self, f"textBrowser{i}").setLineWidth(2)
+            # getattr(self, f"textBrowser{i}").setFrameShape(QtWidgets.QFrame.Box)
+            # getattr(self, f"textBrowser{i}").setLineWidth(2)
             getattr(self, f"textBrowser{i}").setObjectName(f"textBrowser{i}")
-            getattr(self, f"textBrowser{i}").setStyleSheet("background-color: rgb(255,255,255, 75%);")
+            # getattr(self, f"textBrowser{i}").setStyleSheet("background-color: rgb(255,255,255, 75%);")
+            getattr(self, f"textBrowser{i}").setStyleSheet("QWidget { color: rgb(255,255,255);  }")
 
         self.label_header = QLabel(self)
         self.label_header.setEnabled(True)
-        self.label_header.setFont(self.font)
-        self.label_header.setFrameShape(QtWidgets.QFrame.Box)
-        self.label_header.setLineWidth(2)
+        # self.label_header.setFrameShape(QtWidgets.QFrame.Box)
+        # self.label_header.setLineWidth(2)
         self.label_header.setGeometry(QtCore.QRect(560, 30, 800, 80))
         self.label_header.setObjectName(f"label_header")
-        self.label_header.setStyleSheet("background-color: rgb(255,255,255, 75%);")
+        # self.label_header.setStyleSheet("background-color: rgb(255,255,255, 75%);")
 
 
         self.setWindowTitle('Icon')
@@ -79,10 +79,12 @@ class Example(QWidget):
     def Reset(self):
         for i in range(1, 7):
             setattr(self, f"counter{i}", 0)
+            setattr(self, f"flag{i}", False)
         self.places = [0, 180, 270, 360, 450, 540, 630]
         self.new_places = [0, 180, 270, 360, 450, 540, 630]
-        self.refreshing()
         self.settingText()
+        self.refreshing()
+
 
     def visiable(self):
         oImage = QImage(f'{self.path}')
@@ -90,6 +92,13 @@ class Example(QWidget):
         palette.setBrush(QPalette.Window, QBrush(oImage))
         self.setPalette(palette)
         self.showMaximized()
+        self.label_header.setFont(self.font)
+        for i in range(1, 7):
+            # getattr(self, f"label{i}").setFont(self.font)
+            getattr(self, f"textBrowser{i}").setFont(self.font)
+            getattr(self, f"textBrowser{i}").setStyleSheet("QWidget {color: %s; }" % self.color.name())
+            getattr(self, f"label{i}").setStyleSheet("QWidget {color: %s; }" % self.color.name())
+        self.label_header.setStyleSheet("QWidget {color: %s; }" % self.color.name())
 
     def refreshing(self):
         for i in range(1, 7):
