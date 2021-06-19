@@ -17,6 +17,7 @@ class Example(QWidget):
         self.color = QColor(0, 0, 0)
         self.font.setFamily("Arial")
         self.font.setPointSize(24)
+        self.colors = [[], [135, 206, 250], [238, 130, 238], [255, 0, 0], [255, 255, 0], [0, 100, 255], [0, 255, 0]]
 
         for i in range(1, 7):
             setattr(self, f"counter{i}", 0)
@@ -71,7 +72,6 @@ class Example(QWidget):
         self.timer.start(10)
         for i in range(1, 7):
             setattr(self, f"flag{i}", True)
-        print(self.flag1)
 
     def Stop(self):
          self.timer.stop()
@@ -97,8 +97,14 @@ class Example(QWidget):
             # getattr(self, f"label{i}").setFont(self.font)
             getattr(self, f"textBrowser{i}").setFont(self.font)
             getattr(self, f"textBrowser{i}").setStyleSheet("QWidget {color: %s; }" % self.color.name())
-            getattr(self, f"label{i}").setStyleSheet("QWidget {color: %s; }" % self.color.name())
-        self.label_header.setStyleSheet("QWidget {color: %s; }" % self.color.name())
+            getattr(self, f"label{i}").setStyleSheet("QWidget { color: %s; }" % self.colors[i])
+        # self.label1.setStyleSheet(" QWidget {color: rgb(135, 206,250);}")
+        # self.label2.setStyleSheet("QWidget {color: rgb(238, 130, 238);}")
+        # self.label3.setStyleSheet("QWidget {color: rgb(255, 0, 0);}")
+        # self.label4.setStyleSheet("QWidget {color: rgb(255, 255, 0);}")
+        # self.label5.setStyleSheet("QWidget {color: rgb(0, 100, 255);}")
+        # self.label6.setStyleSheet("QWidget {color: rgb(0, 255, 0);}")
+        # self.label7.setStyleSheet("QWidget {color: %s; }" % self.color.name())
 
     def refreshing(self):
         for i in range(1, 7):

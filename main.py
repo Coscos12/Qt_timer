@@ -16,10 +16,13 @@ import threading
 from second_window import *
 
 
+
 class Ui_Dialog(object):
     def setupUi(self, Dialog):
         self.col = QColor(0, 0, 0)
         self.counter = 0
+        self.serial = QSerialPort()
+        self.serial.setBaudRate(9600)
         Dialog.setObjectName("Dialog")
         Dialog.resize(776, 482)
         self.second_window = Example()
@@ -80,6 +83,7 @@ class Ui_Dialog(object):
         for port in ports:
             portList.append(port.portName())
         self.comL.addItems(portList)
+
         self.horizontalLayout.addWidget(self.comL)
         # self.fontComboBox = QtWidgets.QFontComboBox(self.widget)
         self.choose_backgroung = QtWidgets.QPushButton(self.widget)
@@ -131,6 +135,7 @@ class Ui_Dialog(object):
         self.choose_backgroung.clicked.connect(self.file_select)
         # for i in range(1, 7):
         #     getattr(self, f"pause_btn{i}").clicked.connect(lambda: self.Pause(i))
+        self.serial.readyRead.connect(self.onRead)
         self.pause_btn1.clicked.connect(lambda: self.Pause(1))
         self.pause_btn2.clicked.connect(lambda: self.Pause(2))
         self.pause_btn3.clicked.connect(lambda: self.Pause(3))
@@ -140,23 +145,35 @@ class Ui_Dialog(object):
         self.button_font.clicked.connect(self.Font)
         self.button_color.clicked.connect(self.Color)
 
+    def onRead(self):
+        if not self.serial.canReadLine(): return
+        rx = self.serial.readLine()
+        data = str(rx, 'utf-8') # подрезать и разбить по запятым
+
+        # парсинг
+        if data == '0':
+            print("0")
+
+        elif data == '1':
+            print("data[1]")
+
+        elif data == '2':
+            print("data[1]")
+
     def Font(self):
-        print("begin")
         self.Font, self.ok = QFontDialog.getFont()
-        print(("init"))
         if self.ok:
             self.second_window.font = self.Font
-            print("font done")
 
     def Color(self):
         self.col = QColorDialog.getColor()
         if self.col.isValid():
             self.second_window.color = self.col
-            print("color done")
 
     def Reset(self):
         self.counter = 0
         self.second_window.Reset()
+        print(self.comL.currentText())
 
     def Pause(self, i):
         if (getattr(self.second_window, f"flag{i}") == True):
@@ -164,7 +181,6 @@ class Ui_Dialog(object):
             self.counter += 1
             k = self.second_window.places.pop(self.second_window.places.index(self.second_window.new_places[i]))
             self.second_window.places.insert(self.counter, k)
-
         self.second_window.refreshing()
 
 
@@ -182,7 +198,10 @@ class Ui_Dialog(object):
         self.second_window.textBrowser5.setText(self.lineEdit5.text())
         self.second_window.textBrowser6.setText(self.lineEdit6.text())
         self.second_window.visiable()
-
+        # self.serial.setPortName(ui.comL.currentText())
+        # self.serial.open(QIODevice.ReadWrite)
+        # self.serialrd = self.serial_port.readLine().data().decode().strip()
+        # print(self.serialrd)
 
 
 if __name__ == "__main__":
@@ -193,4 +212,8 @@ if __name__ == "__main__":
     ui = Ui_Dialog()
     ui.setupUi(Dialog)
     Dialog.show()
+    serial_port = QtSerialPort.QSerialPort("COM3")
+    serial_port.open(QtCore.QIODevice.ReadWrite)
+    serialrd = serial_port.readLine().data().decode().strip()
+    print(serialrd)
     sys.exit(app.exec_())
