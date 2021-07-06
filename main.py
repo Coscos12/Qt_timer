@@ -3,16 +3,7 @@ from PyQt5.QtGui import QImage, QPalette, QBrush
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import *
 from PyQt5.QtSerialPort import QSerialPort, QSerialPortInfo
-from PyQt5.QtWidgets import (
-    QApplication,
-    QLabel,
-    QMainWindow,
-    QPushButton,
-    QVBoxLayout,
-    QWidget,
-    QDialog
-)
-import threading
+
 from second_window import *
 
 
@@ -32,14 +23,7 @@ class Ui_Dialog(object):
             getattr(self, f"lineEdit{i}").setGeometry(QtCore.QRect(80, 90+i*40, 400, 30))
         self.lineEdit7.setGeometry(QtCore.QRect(210, 40, 400, 30))
 
-
-
-        # self.lineEdit0 = QtWidgets.QLineEdit(Dialog)
-        # self.lineEdit0.setGeometry(QtCore.QRect(210, 380, 400, 30))
-        # self.LineEdit0.setObjectName("LineEdit0")
-
         for i in range(1, 7):
-            # getattr(self, f"label{i}").setEnabled(True)
             setattr(self, f"pause_btn{i}", QtWidgets.QPushButton(Dialog))
             getattr(self, f"pause_btn{i}").setObjectName(f"pause_btn{i}")
             getattr(self, f"pause_btn{i}").setGeometry(QtCore.QRect(520, 90+i*40, 75, 30))
@@ -47,12 +31,12 @@ class Ui_Dialog(object):
         self.button_font = QtWidgets.QPushButton(Dialog)
         self.button_font.setObjectName("pause_font")
         self.button_font.setGeometry(QtCore.QRect(80, 430, 75, 25))
-        self.button_font.setText("шрифт")
+        self.button_font.setText("Шрифт")
 
         self.button_color = QtWidgets.QPushButton(Dialog)
         self.button_color.setObjectName("pause_color")
         self.button_color.setGeometry(QtCore.QRect(180, 430, 75, 25))
-        self.button_color.setText("цвет")
+        self.button_color.setText("Цвет")
 
         self.pause_btn1.setText("голубой")
         self.pause_btn2.setText("розовый")
@@ -76,8 +60,6 @@ class Ui_Dialog(object):
         self.horizontalLayout.setObjectName("horizontalLayout")
         self.comL = QtWidgets.QComboBox(self.widget)
         self.comL.setObjectName("comL")
-        serial = QSerialPort()
-        serial.setBaudRate(9600)
         portList = []
         ports = QSerialPortInfo().availablePorts()
         for port in ports:
@@ -85,30 +67,22 @@ class Ui_Dialog(object):
         self.comL.addItems(portList)
 
         self.horizontalLayout.addWidget(self.comL)
-        # self.fontComboBox = QtWidgets.QFontComboBox(self.widget)
         self.choose_backgroung = QtWidgets.QPushButton(self.widget)
         self.start_button = QtWidgets.QPushButton(self.widget)
         self.stop_button = QtWidgets.QPushButton(self.widget)
         self.reset_button = QtWidgets.QPushButton(self.widget)
         self.start_window = QtWidgets.QPushButton(self.widget)
         self.horizontalLayout1 = QtWidgets.QHBoxLayout(self.widget)
-
-        # self.fontComboBox.setObjectName("fontComboBox")
         self.choose_backgroung.setObjectName("Choose_background")
         self.start_button.setObjectName("start_button")
         self.stop_button.setObjectName("stop_button")
         self.reset_button.setObjectName("reset_button")
         self.start_window.setObjectName("reset_button")
-
-        # self.horizontalLayout.addWidget(self.fontComboBox)
         self.horizontalLayout.addWidget(self.choose_backgroung)
         self.horizontalLayout.addWidget(self.start_button)
         self.horizontalLayout.addWidget(self.stop_button)
         self.horizontalLayout.addWidget(self.reset_button)
         self.horizontalLayout.addWidget(self.start_window)
-
-
-
         self.retranslateUi(Dialog)
         self.add_functions()
 
@@ -117,25 +91,18 @@ class Ui_Dialog(object):
     def retranslateUi(self, Dialog):
         _translate = QtCore.QCoreApplication.translate
         Dialog.setWindowTitle(_translate("Dialog", "Dialog"))
-        self.choose_backgroung.setText(_translate("Dialog", "Выбрать"))
+        self.choose_backgroung.setText(_translate("Dialog", "Фон"))
         self.start_button.setText(_translate("Dialog", "Старт"))
         self.stop_button.setText(_translate("Dialog", "Стоп"))
         self.reset_button.setText(_translate("Dialog", "Сброс"))
         self.start_window.setText(_translate("Dialog", "Отобразить"))
 
     def add_functions(self):
-        self.timer = QTimer()
-        # self.timer.timeout.connect(self.printing)
-        self.timer.start(10)
-
         self.start_button.clicked.connect(lambda: self.second_window.Start())
         self.stop_button.clicked.connect(lambda: self.second_window.Stop())
         self.reset_button.clicked.connect(self.Reset)
         self.start_window.clicked.connect(self.printing)
         self.choose_backgroung.clicked.connect(self.file_select)
-        # for i in range(1, 7):
-        #     getattr(self, f"pause_btn{i}").clicked.connect(lambda: self.Pause(i))
-        self.serial.readyRead.connect(self.onRead)
         self.pause_btn1.clicked.connect(lambda: self.Pause(1))
         self.pause_btn2.clicked.connect(lambda: self.Pause(2))
         self.pause_btn3.clicked.connect(lambda: self.Pause(3))
@@ -144,21 +111,29 @@ class Ui_Dialog(object):
         self.pause_btn6.clicked.connect(lambda: self.Pause(6))
         self.button_font.clicked.connect(self.Font)
         self.button_color.clicked.connect(self.Color)
+        self.serial.readyRead.connect(self.onRead)
 
     def onRead(self):
         if not self.serial.canReadLine(): return
-        rx = self.serial.readLine()
-        data = str(rx, 'utf-8') # подрезать и разбить по запятым
+        self.rx = self.serial.readLine().data().decode().strip()
 
-        # парсинг
-        if data == '0':
-            print("0")
+        if self.rx == '1':
+            self.Pause(1)
 
-        elif data == '1':
-            print("data[1]")
+        elif self.rx == '2':
+            self.Pause(2)
 
-        elif data == '2':
-            print("data[1]")
+        elif self.rx == '3':
+            self.Pause(3)
+
+        elif self.rx == '4':
+            self.Pause(4)
+
+        elif self.rx == '5':
+            self.Pause(5)
+
+        elif self.rx == '6':
+            self.Pause(6)
 
     def Font(self):
         self.Font, self.ok = QFontDialog.getFont()
@@ -198,10 +173,9 @@ class Ui_Dialog(object):
         self.second_window.textBrowser5.setText(self.lineEdit5.text())
         self.second_window.textBrowser6.setText(self.lineEdit6.text())
         self.second_window.visiable()
-        # self.serial.setPortName(ui.comL.currentText())
-        # self.serial.open(QIODevice.ReadWrite)
-        # self.serialrd = self.serial_port.readLine().data().decode().strip()
-        # print(self.serialrd)
+        self.serial.setPortName(ui.comL.currentText())
+        self.serial.open(QIODevice.ReadWrite)
+
 
 
 if __name__ == "__main__":
@@ -212,8 +186,4 @@ if __name__ == "__main__":
     ui = Ui_Dialog()
     ui.setupUi(Dialog)
     Dialog.show()
-    serial_port = QtSerialPort.QSerialPort("COM3")
-    serial_port.open(QtCore.QIODevice.ReadWrite)
-    serialrd = serial_port.readLine().data().decode().strip()
-    print(serialrd)
     sys.exit(app.exec_())

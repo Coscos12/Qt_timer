@@ -1,4 +1,3 @@
-import sys
 from PyQt5 import QtCore, QtGui, QtWidgets, QtSerialPort
 from PyQt5.QtCore import *
 from PyQt5.QtWidgets import *
@@ -10,6 +9,8 @@ from PyQt5.QtGui import QImage, QPalette, QBrush, QTextCursor, QColor
 class Example(QWidget):
     def __init__(self, parent=None):
         super(Example, self).__init__(parent)
+        self.timer = QTimer()
+        self.timer.timeout.connect(self.showTime)
         self.places = [0, 180, 270, 360, 450, 540, 630]
         self.new_places = [0, 180, 270, 360, 450, 540, 630]
         self.path =''
@@ -17,7 +18,7 @@ class Example(QWidget):
         self.color = QColor(0, 0, 0)
         self.font.setFamily("Arial")
         self.font.setPointSize(24)
-        self.colors = [[], [135, 206, 250], [238, 130, 238], [255, 0, 0], [255, 255, 0], [0, 100, 255], [0, 255, 0]]
+        self.colors = [1, '#87cefa', '#ee82ee', '#ff0000', '#ffff00', '#0064ff','#00ff00']
 
         for i in range(1, 7):
             setattr(self, f"counter{i}", 0)
@@ -38,12 +39,12 @@ class Example(QWidget):
             # getattr(self, f"textBrowser{i}").setLineWidth(2)
             getattr(self, f"textBrowser{i}").setObjectName(f"textBrowser{i}")
             # getattr(self, f"textBrowser{i}").setStyleSheet("background-color: rgb(255,255,255, 75%);")
-            getattr(self, f"textBrowser{i}").setStyleSheet("QWidget { color: rgb(255,255,255);  }")
+            # getattr(self, f"textBrowser{i}").setStyleSheet("QWidget { color: rgb(255,255,255);  }")
 
         self.label_header = QLabel(self)
         self.label_header.setEnabled(True)
         # self.label_header.setFrameShape(QtWidgets.QFrame.Box)
-        # self.label_header.setLineWidth(2)
+        # self.label_header.setLineWidth(0)
         self.label_header.setGeometry(QtCore.QRect(560, 30, 800, 80))
         self.label_header.setObjectName(f"label_header")
         # self.label_header.setStyleSheet("background-color: rgb(255,255,255, 75%);")
@@ -67,8 +68,7 @@ class Example(QWidget):
 
 
     def Start(self):
-        self.timer = QTimer()
-        self.timer.timeout.connect(self.showTime)
+
         self.timer.start(10)
         for i in range(1, 7):
             setattr(self, f"flag{i}", True)
@@ -98,13 +98,7 @@ class Example(QWidget):
             getattr(self, f"textBrowser{i}").setFont(self.font)
             getattr(self, f"textBrowser{i}").setStyleSheet("QWidget {color: %s; }" % self.color.name())
             getattr(self, f"label{i}").setStyleSheet("QWidget { color: %s; }" % self.colors[i])
-        # self.label1.setStyleSheet(" QWidget {color: rgb(135, 206,250);}")
-        # self.label2.setStyleSheet("QWidget {color: rgb(238, 130, 238);}")
-        # self.label3.setStyleSheet("QWidget {color: rgb(255, 0, 0);}")
-        # self.label4.setStyleSheet("QWidget {color: rgb(255, 255, 0);}")
-        # self.label5.setStyleSheet("QWidget {color: rgb(0, 100, 255);}")
-        # self.label6.setStyleSheet("QWidget {color: rgb(0, 255, 0);}")
-        # self.label7.setStyleSheet("QWidget {color: %s; }" % self.color.name())
+        self.label_header.setStyleSheet("QWidget {color: %s; }" % self.color.name())
 
     def refreshing(self):
         for i in range(1, 7):
@@ -128,8 +122,6 @@ class Example(QWidget):
         self.settingText()
 
     def settingText(self):
-        # for i in range(1, 7):
-        #     setattr(self, f"text{i}", str(self.counter1 / 100))
         self.text1 = str(self.counter1 / 100)
         self.text2 = str(self.counter2 / 100)
         self.text3 = str(self.counter3 / 100)
@@ -143,11 +135,3 @@ class Example(QWidget):
         self.label4.setText(self.text4)
         self.label5.setText(self.text5)
         self.label6.setText(self.text6)
-
-
-
-# if __name__ == '__main__':
-#     app = QApplication(sys.argv)
-#     ex = Example()
-#     ex.showMaximized()
-#     sys.exit(app.exec_())
