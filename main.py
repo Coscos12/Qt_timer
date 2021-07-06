@@ -1,11 +1,6 @@
-import sys
-from PyQt5.QtGui import QImage, QPalette, QBrush
-from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtCore import *
+from PyQt5 import QtWidgets
 from PyQt5.QtSerialPort import QSerialPort, QSerialPortInfo
-
 from second_window import *
-
 
 
 class Ui_Dialog(object):
@@ -158,11 +153,9 @@ class Ui_Dialog(object):
             self.second_window.places.insert(self.counter, k)
         self.second_window.refreshing()
 
-
     def file_select(self):
         filename = QFileDialog.getOpenFileName()
         self.second_window.path = filename[0]
-
 
     def printing(self):
         self.second_window.label_header.setText(self.lineEdit7.text())
@@ -175,7 +168,6 @@ class Ui_Dialog(object):
         self.second_window.visiable()
         self.serial.setPortName(ui.comL.currentText())
         self.serial.open(QIODevice.ReadWrite)
-
 
 
 if __name__ == "__main__":

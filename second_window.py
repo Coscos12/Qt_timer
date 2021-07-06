@@ -1,9 +1,7 @@
-from PyQt5 import QtCore, QtGui, QtWidgets, QtSerialPort
+from PyQt5 import QtCore, QtGui
 from PyQt5.QtCore import *
 from PyQt5.QtWidgets import *
-from PyQt5.QtGui import QImage, QPalette, QBrush, QTextCursor, QColor
-
-
+from PyQt5.QtGui import QImage, QPalette, QBrush, QColor
 
 
 class Example(QWidget):
@@ -49,7 +47,6 @@ class Example(QWidget):
         self.label_header.setObjectName(f"label_header")
         # self.label_header.setStyleSheet("background-color: rgb(255,255,255, 75%);")
 
-
         self.setWindowTitle('Icon')
         self.text1 = str(self.counter1 / 100)
         self.text2 = str(self.counter2 / 100)
@@ -57,15 +54,12 @@ class Example(QWidget):
         self.text4 = str(self.counter4 / 100)
         self.text5 = str(self.counter5 / 100)
         self.text6 = str(self.counter6 / 100)
-
-
         self.label1.setText(self.text1)
         self.label2.setText(self.text2)
         self.label3.setText(self.text3)
         self.label4.setText(self.text4)
         self.label5.setText(self.text5)
         self.label6.setText(self.text6)
-
 
     def Start(self):
 
@@ -84,7 +78,6 @@ class Example(QWidget):
         self.new_places = [0, 180, 270, 360, 450, 540, 630]
         self.settingText()
         self.refreshing()
-
 
     def visiable(self):
         oImage = QImage(f'{self.path}')
