@@ -142,6 +142,7 @@ class Ui_Dialog(object):
 
     def Reset(self):
         self.counter = 0
+        self.second_window.main_counter = 0
         self.second_window.Reset()
         print(self.comL.currentText())
 

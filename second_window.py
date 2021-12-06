@@ -48,21 +48,10 @@ class Example(QWidget):
         # self.label_header.setStyleSheet("background-color: rgb(255,255,255, 75%);")
 
         self.setWindowTitle('Icon')
-        self.text1 = str(self.counter1 / 100)
-        self.text2 = str(self.counter2 / 100)
-        self.text3 = str(self.counter3 / 100)
-        self.text4 = str(self.counter4 / 100)
-        self.text5 = str(self.counter5 / 100)
-        self.text6 = str(self.counter6 / 100)
-        self.label1.setText(self.text1)
-        self.label2.setText(self.text2)
-        self.label3.setText(self.text3)
-        self.label4.setText(self.text4)
-        self.label5.setText(self.text5)
-        self.label6.setText(self.text6)
+        self.main_counter = 0
+        self.settingText()
 
     def Start(self):
-
         self.timer.start(10)
         for i in range(1, 7):
             setattr(self, f"flag{i}", True)
@@ -100,31 +89,15 @@ class Example(QWidget):
 
 
     def showTime(self):
-        if self.flag1:
-            self.counter1 += 1
-        if self.flag2:
-            self.counter2 += 1
-        if self.flag3:
-            self.counter3 += 1
-        if self.flag4:
-            self.counter4 += 1
-        if self.flag5:
-            self.counter5 += 1
-        if self.flag6:
-            self.counter6 += 1
+        self.main_counter += 1
+        for i in range(1, 7):
+            if(getattr(self, f"flag{i}") == True):
+                setattr(self, f"counter{i}", getattr(self, f"main_counter"))
         self.settingText()
 
     def settingText(self):
-        self.text1 = str(self.counter1 / 100)
-        self.text2 = str(self.counter2 / 100)
-        self.text3 = str(self.counter3 / 100)
-        self.text4 = str(self.counter4 / 100)
-        self.text5 = str(self.counter5 / 100)
-        self.text6 = str(self.counter6 / 100)
-        # # showing text
-        self.label1.setText(self.text1)
-        self.label2.setText(self.text2)
-        self.label3.setText(self.text3)
-        self.label4.setText(self.text4)
-        self.label5.setText(self.text5)
-        self.label6.setText(self.text6)
+        for i in range(1, 7):
+            setattr(self, f"text{i}", str(getattr(self, f"counter{i}")/100))
+            # showing text
+            getattr(self, f"label{i}").setText( str(getattr(self, f"text{i}")))
+
