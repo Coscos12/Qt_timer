@@ -99,5 +99,5 @@ class Example(QWidget):
         for i in range(1, 7):
             setattr(self, f"text{i}", str(getattr(self, f"counter{i}")/100))
             # showing text
-            getattr(self, f"label{i}").setText( str(getattr(self, f"text{i}")))
+            getattr(self, f"label{i}").setText(str(getattr(self, f"text{i}")))
 

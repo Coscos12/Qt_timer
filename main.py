@@ -47,6 +47,7 @@ class Ui_Dialog(object):
         self.pause_btn5.setStyleSheet("background-color: rgb(0, 100, 255);")
         self.pause_btn6.setStyleSheet("background-color: rgb(0, 255, 0);")
 
+
         self.widget = QtWidgets.QWidget(Dialog)
         self.widget.setGeometry(QtCore.QRect(81, 390, 589, 25))
         self.widget.setObjectName("widget")
@@ -160,12 +161,8 @@ class Ui_Dialog(object):
 
     def printing(self):
         self.second_window.label_header.setText(self.lineEdit7.text())
-        self.second_window.textBrowser1.setText(self.lineEdit1.text())
-        self.second_window.textBrowser2.setText(self.lineEdit2.text())
-        self.second_window.textBrowser3.setText(self.lineEdit3.text())
-        self.second_window.textBrowser4.setText(self.lineEdit4.text())
-        self.second_window.textBrowser5.setText(self.lineEdit5.text())
-        self.second_window.textBrowser6.setText(self.lineEdit6.text())
+        for i in range(1, 7):
+            getattr(self.second_window, f"textBrowser{i}").setText(getattr(self, f"lineEdit{i}").text())
         self.second_window.visiable()
         self.serial.setPortName(ui.comL.currentText())
         self.serial.open(QIODevice.ReadWrite)
