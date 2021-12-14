@@ -17,6 +17,7 @@ class Example(QWidget):
         self.font.setFamily("Arial")
         self.font.setPointSize(24)
         self.colors = [1, '#87cefa', '#ee82ee', '#ff0000', '#ffff00', '#0064ff','#00ff00']
+        # print(self.Ui_Dialog.count)
 
         for i in range(1, 7):
             setattr(self, f"counter{i}", 0)

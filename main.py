@@ -7,6 +7,7 @@ class Ui_Dialog(object):
     def setupUi(self, Dialog):
         self.col = QColor(0, 0, 0)
         self.counter = 0
+        self.count = 0
         self.serial = QSerialPort()
         self.serial.setBaudRate(9600)
         Dialog.setObjectName("Dialog")
@@ -54,6 +55,12 @@ class Ui_Dialog(object):
         self.horizontalLayout = QtWidgets.QHBoxLayout(self.widget)
         self.horizontalLayout.setContentsMargins(0, 0, 0, 0)
         self.horizontalLayout.setObjectName("horizontalLayout")
+
+        self.PP = QtWidgets.QComboBox(self.widget)
+        self.PP.setObjectName("PP")
+
+        self.PP.addItems(['2', '3', '4', '5', '6'])
+
         self.comL = QtWidgets.QComboBox(self.widget)
         self.comL.setObjectName("comL")
         portList = []
@@ -61,7 +68,7 @@ class Ui_Dialog(object):
         for port in ports:
             portList.append(port.portName())
         self.comL.addItems(portList)
-
+        self.horizontalLayout.addWidget(self.PP)
         self.horizontalLayout.addWidget(self.comL)
         self.choose_backgroung = QtWidgets.QPushButton(self.widget)
         self.start_button = QtWidgets.QPushButton(self.widget)
@@ -160,6 +167,8 @@ class Ui_Dialog(object):
         self.second_window.path = filename[0]
 
     def printing(self):
+        print(self.PP.currentText())
+        # self.second_window.count = int(self.PP.currentText()) + 1
         self.second_window.label_header.setText(self.lineEdit7.text())
         for i in range(1, 7):
             getattr(self.second_window, f"textBrowser{i}").setText(getattr(self, f"lineEdit{i}").text())
